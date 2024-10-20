@@ -158,9 +158,9 @@ int main() {
     vector<Job> jobs;
     for (int i = 0; i < numJobs; i++) {
         int size;
-        cout << "Process " << i + 1 << " size: ";
+        cout << "Job " << i + 1 << " size: ";
         cin >> size;
-        jobs.emplace_back("P" + to_string(i + 1), size);
+        jobs.emplace_back("" + to_string(i + 1), size);
     }
 
     // Apply each algorithm
