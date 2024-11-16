@@ -154,30 +154,29 @@ void PreemptivePriorityScheduling(Process proc[], int count) {
 
 void RoundRobin(Process proc[], int count, int timeQuantum) {
     double systemTime = 0;
-    int completedCount = 0;
-    vector<int> orderOfExecution;
+    double localQuantum;
+    int systemQt = 2;
+    int completedJobs = 0;
 
-    while (completedCount != count) {
+    while (completedJobs < count) {
         for (int i = 0; i < count; i++) {
             if (proc[i].arrivalTime <= systemTime && !proc[i].isFinished) {
-                double quantumAdjustment = timeQuantum + proc[i].priority / 2.0;
+                localQuantum = timeQuantum + proc[i].priority / 2.0;
 
                 if (proc[i].remainingBurst == proc[i].burstTime) {
                     proc[i].startTime = systemTime;
                 }
 
-                if (quantumAdjustment > proc[i].remainingBurst) {
+                if (localQuantum > proc[i].remainingBurst) {
                     proc[i].finishTime = systemTime + proc[i].remainingBurst;
                     systemTime += proc[i].remainingBurst;
                     proc[i].turnAroundTime = proc[i].finishTime - proc[i].arrivalTime;
                     proc[i].isFinished = true;
-                    orderOfExecution.push_back(proc[i].id);
-
-                    completedCount++;
+                    completedJobs++;
                 } else {
-                    proc[i].finishTime = systemTime + quantumAdjustment;
-                    systemTime += quantumAdjustment;
-                    proc[i].remainingBurst -= quantumAdjustment;
+                    proc[i].finishTime = systemTime + localQuantum;
+                    systemTime += localQuantum;
+                    proc[i].remainingBurst -= localQuantum;
                 }
             }
         }
